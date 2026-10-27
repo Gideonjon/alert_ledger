@@ -1,19 +1,28 @@
 name: alert_ledger
-description: "A new Flutter project."
+description: Turn Nigerian bank alerts into a searchable ledger. Built for the Appwrite Databases Hackathon.
 publish_to: 'none'
-version: 0.1.0+1
+version: 0.2.0+2
 
 environment:
-  sdk: ^3.13.0
+  sdk: ">=3.5.0 <4.0.0"
 
+# Versions are left open on purpose: run `flutter pub upgrade --major-versions`
+# once, then pin whatever resolves. The Appwrite SDK must be a version that
+# ships TablesDB (it replaced the old Databases class).
+#
+# Every package here supports Android, iOS and web. Nothing imports dart:io,
+# so the same code builds for all three.
 dependencies:
   flutter:
     sdk: flutter
+  appwrite: any
+  intl: any
+  google_fonts: any
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  flutter_lints: ^6.0.0
+  flutter_lints: any
 
 flutter:
   uses-material-design: true
