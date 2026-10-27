@@ -3,6 +3,7 @@ import 'package:intl/intl.dart';
 
 import '../app_shell.dart';
 import '../models/tx.dart';
+import '../services/ledger_api.dart';
 import '../state/ledger_store.dart';
 import '../theme.dart';
 import '../widgets/guide_card.dart';
@@ -20,6 +21,26 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   final store = LedgerStore.instance;
   int _monthIndex = 0; // 0 = newest month
+  bool _pingingAppwrite = false;
+
+  Future<void> _pingAppwrite() async {
+    if (_pingingAppwrite) return;
+    setState(() => _pingingAppwrite = true);
+    try {
+      final response = await LedgerApi.instance.client.ping();
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Appwrite connected: $response')),
+      );
+    } catch (error) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Appwrite ping failed: $error')),
+      );
+    } finally {
+      if (mounted) setState(() => _pingingAppwrite = false);
+    }
+  }
 
   String get _greeting {
     final h = DateTime.now().hour;
@@ -69,6 +90,23 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                       const AlertsToLedgerArt(height: 92),
                     ],
+                  ),
+                ),
+              ),
+
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: Align(
+                  alignment: Alignment.centerRight,
+                  child: OutlinedButton.icon(
+                    onPressed: _pingingAppwrite ? null : _pingAppwrite,
+                    icon: _pingingAppwrite
+                        ? const SizedBox.square(
+                            dimension: 18,
+                            child: CircularProgressIndicator(strokeWidth: 2),
+                          )
+                        : const Icon(Icons.wifi_tethering),
+                    label: Text(_pingingAppwrite ? 'Pinging...' : 'Ping Appwrite'),
                   ),
                 ),
               ),

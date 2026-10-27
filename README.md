@@ -103,7 +103,9 @@ scripts/build_site.sh    Landing page + web app → one static site
    APPWRITE_PROJECT_ID=<id> APPWRITE_API_KEY=<key> npm run setup
    ```
 4. **Deploy the function.** Function ID `ledger`, runtime Node 22, entrypoint `src/main.js`, build command `npm install`. Execute access: **Users**. Give its dynamic key: rows read/write, documents read/write, `embeddings.write`.
-5. **Run the app.** Put your endpoint and project ID in `app/lib/config.dart`, then:
+5. **Run the app.** The endpoint, project name and project ID are configured in
+   `lib/config.dart`. Launch the app and tap **Ping Appwrite** on Home to check
+   connectivity, then:
    ```bash
    cd app
    flutter create . --platforms=android,ios,web --project-name alert_ledger --org app.alertledger
@@ -136,5 +138,4 @@ Flutter (Android, iOS, web) · `appwrite` Flutter SDK · `google_fonts` (Bricola
 - **Technical execution:** parsing is deterministic and tested, money is summed from TablesDB and never guessed by a model, and CI builds for three platforms.
 - **Design and experience:** paste → ask. A guided first run, plain-language insights, illustrations, responsive from phone to desktop, light and dark.
 - **Usage of Appwrite Databases:** two database types used for what each does best, built-in Embeddings, HNSW index, metadata-filtered vector search, per-user seed vectors that change future results, row-level security, account prefs, and an idempotent setup script.
-
 
