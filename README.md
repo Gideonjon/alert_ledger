@@ -127,44 +127,14 @@ Every push runs `.github/workflows/build.yml`: backend tests, `flutter analyze`,
 
 Flutter (Android, iOS, web) · `appwrite` Flutter SDK · `google_fonts` (Bricolage Grotesque, Figtree) · `intl` · Appwrite Auth (anonymous, account prefs) · Appwrite TablesDB · Appwrite VectorsDB · Appwrite Embeddings (`nomic-embed-text`) · Appwrite Functions (Node 22, `node-appwrite`) · Appwrite Sites · GitHub Actions
 
----
 
-## Build plan (Oct 26 → Oct 31)
 
-The deadline is **Oct 31, 11:59 PM PT = Sun Nov 1, 7:59 AM in Lagos**. Aim to submit **Saturday evening**.
 
-| Day | Goal | Done when |
-|---|---|---|
-| **Mon 26 (tonight)** | Push to a new public GitHub repo, so the commit history starts inside the hackathon window. Create the Appwrite project, run `setup`, deploy the function. | CI is green on all three platforms; `npm run setup` prints all ✓. |
-| **Tue 27** | Run on a real Android phone and in Chrome. Load samples, finish the getting-started guide. **Tune** `MAX_SEARCH_DISTANCE` and `MAX_CATEGORY_DISTANCE` in `config.js` against real embeddings (log `$distance`). Collect 20–30 real alert formats (blank out account digits) and add them to `test/fixtures.js`. | The six suggested questions all answer correctly. |
-| **Wed 28** | iPhone run (a Mac or a friend's). Fix anything that looks off on small screens and in dark mode. Check that the correction loop teaches "ROYAL GAS STATION" as fuel. | Same experience on all three platforms. |
-| **Thu 29** | Publish the site (landing + web app) on Appwrite Sites. Make a GitHub release with the CI APK. **Stretch, Android only:** "Import from SMS". | Landing page buttons all work. |
-| **Fri 30** | Record the demo (≤3 min). Final README. | Video uploaded. |
-| **Sat 31** | Buffer, then **submit by evening** (Lagos time). | Submission confirmed. |
-
-**Cut list if you fall behind** (in this order): SMS import → iOS device testing (CI still proves it builds) → web hosting. Never cut: samples flow, the questions working, the video.
-
-## Demo video script (≈2:40)
-
-1. **0:00 Landing page (15s).** Scroll the landing page once. "Your bank alerts already know where your money went."
-2. **0:15 The problem (15s).** A real SMS inbox full of bank alerts. "I can't answer a simple question: how much did I spend on fuel last month?"
-3. **0:30 First run (30s).** Open the app on a phone. Point at the getting-started guide. Add alerts → Load sample alerts → Save. Home fills in: month summary, insight line, category bars.
-4. **1:00 Ask (50s).** *Fuel in September* (exact sum). *Show transfers to Emeka* (two banks, two formats, both matched by meaning; point at the match score). *How many times did I buy suya?*
-5. **1:50 It learns (25s).** Open `ROYAL GAS STATION`, pick Fuel, tap Move all. The guide's last step ticks.
-6. **2:15 Under the hood (20s).** The architecture table, then the same app running in a browser to show it's one codebase.
-7. **2:35 Close (5s).** "Your bank already wrote your budget. Alert Ledger lets you read it."
-
-## How this maps to the judging criteria
+## How this maps to the hackathon criteria
 
 - **Idea and innovation:** a very local problem (Nigerian alert formats, naira, kobo) with a universal pattern, and an app that learns each user's merchants.
 - **Technical execution:** parsing is deterministic and tested, money is summed from TablesDB and never guessed by a model, and CI builds for three platforms.
 - **Design and experience:** paste → ask. A guided first run, plain-language insights, illustrations, responsive from phone to desktop, light and dark.
 - **Usage of Appwrite Databases:** two database types used for what each does best, built-in Embeddings, HNSW index, metadata-filtered vector search, per-user seed vectors that change future results, row-level security, account prefs, and an idempotent setup script.
 
-## Submission checklist
 
-- [ ] Public GitHub repo; every commit dated Oct 27 or later
-- [ ] README tech stack lists every library used
-- [ ] Demo video, 3 minutes or less
-- [ ] Live demo link (landing page + web app on Appwrite Sites)
-- [ ] Submitted at hackathon.appwrite.io before Oct 31, 11:59 PM PT
