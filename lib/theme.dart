@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:material_ui/src/text_theme.dart' hide TextTheme;
 
 /// Palette: banknote green on cool paper, with the amber of a notification dot.
 class Palette {
@@ -48,7 +49,7 @@ ThemeData buildTheme(Brightness b) {
     outlineVariant: dark ? Palette.darkLine : Palette.line,
   );
 
-  final text = GoogleFonts.figtreeTextTheme(ThemeData(brightness: b).textTheme).apply(
+  final text = GoogleFonts.figtreeTextTheme(ThemeData(brightness: b).textTheme as TextTheme?).apply(
     bodyColor: scheme.onSurface,
     displayColor: scheme.onSurface,
   );
