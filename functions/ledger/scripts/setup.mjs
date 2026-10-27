@@ -109,7 +109,7 @@ for (const [name, create] of columns) {
 }
 
 console.log('Waiting for columns to become available...');
-await new Promise((resolve) => setTimeout(resolve, 4000));
+await new Promise(resolve => setTimeout(resolve, 5000));
 
 const indexes = [
   ['idx_user_date', ['userId', 'txDate']],
