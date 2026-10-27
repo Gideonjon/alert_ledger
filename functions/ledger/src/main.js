@@ -379,4 +379,3 @@ export default async ({ req, res, log, error }) => {
     return res.json({ error: e.message || 'Internal server error' }, 500);
   }
 };
-EOF
