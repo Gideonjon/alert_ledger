@@ -79,21 +79,25 @@ class _HomeScreenState extends State<HomeScreen> {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Expanded(
-                        child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                          Text(_greeting, style: TextStyle(color: cs.onSurfaceVariant)),
-                          const SizedBox(height: 4),
-                          Text(
-                            store.hasTransactions ? 'Here is where your money went' : 'Your alerts, finally organised',
-                            style: t.headlineSmall,
-                          ),
-                        ]),
+                        child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(_greeting,
+                                  style: TextStyle(color: cs.onSurfaceVariant)),
+                              const SizedBox(height: 4),
+                              Text(
+                                store.hasTransactions
+                                    ? 'Here is where your money went'
+                                    : 'Your alerts, finally organised',
+                                style: t.headlineSmall,
+                              ),
+                            ]),
                       ),
                       const AlertsToLedgerArt(height: 92),
                     ],
                   ),
                 ),
               ),
-
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16),
                 child: Align(
@@ -106,11 +110,11 @@ class _HomeScreenState extends State<HomeScreen> {
                             child: CircularProgressIndicator(strokeWidth: 2),
                           )
                         : const Icon(Icons.wifi_tethering),
-                    label: Text(_pingingAppwrite ? 'Pinging...' : 'Ping Appwrite'),
+                    label:
+                        Text(_pingingAppwrite ? 'Pinging...' : 'Ping Appwrite'),
                   ),
                 ),
               ),
-
               if (store.showGuide)
                 Padding(
                   padding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
@@ -120,9 +124,10 @@ class _HomeScreenState extends State<HomeScreen> {
                     onFix: () => AppShell.tab.value = 1,
                   ),
                 ),
-
               if (store.loading && !store.hasTransactions)
-                const Padding(padding: EdgeInsets.all(40), child: Center(child: CircularProgressIndicator()))
+                const Padding(
+                    padding: EdgeInsets.all(40),
+                    child: Center(child: CircularProgressIndicator()))
               else if (store.error != null && !store.hasTransactions)
                 _Message(
                   title: "Couldn't load your ledger",
@@ -137,36 +142,60 @@ class _HomeScreenState extends State<HomeScreen> {
                   child: Card(
                     child: Padding(
                       padding: const EdgeInsets.fromLTRB(18, 8, 8, 18),
-                      child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                        Row(children: [
-                          Expanded(child: Text(DateFormat('MMMM y').format(month), style: t.titleMedium?.copyWith(fontWeight: FontWeight.w700))),
-                          IconButton(
-                            tooltip: 'Earlier month',
-                            onPressed: _monthIndex < months.length - 1 ? () => setState(() => _monthIndex++) : null,
-                            icon: const Icon(Icons.chevron_left),
-                          ),
-                          IconButton(
-                            tooltip: 'Later month',
-                            onPressed: _monthIndex > 0 ? () => setState(() => _monthIndex--) : null,
-                            icon: const Icon(Icons.chevron_right),
-                          ),
-                        ]),
-                        Row(children: [
-                          Expanded(child: _Stat(label: 'Money out', kobo: s.spentKobo)),
-                          Expanded(child: _Stat(label: 'Money in', kobo: s.receivedKobo, credit: true)),
-                        ]),
-                        if (s.categories.isNotEmpty) ...[
-                          const SizedBox(height: 14),
-                          _Insight(summary: s),
-                          const SizedBox(height: 14),
-                          for (final e in s.categories.take(5))
-                            _CategoryBar(category: e.key, kobo: e.value, total: s.spentKobo, onTap: () => _openCategory(e.key)),
-                        ] else
-                          Padding(
-                            padding: const EdgeInsets.only(top: 12, right: 10),
-                            child: Text('No spending recorded this month yet.', style: TextStyle(color: cs.onSurfaceVariant)),
-                          ),
-                      ]),
+                      child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(children: [
+                              Expanded(
+                                  child: Text(
+                                      DateFormat('MMMM y').format(month),
+                                      style: t.titleMedium?.copyWith(
+                                          fontWeight: FontWeight.w700))),
+                              IconButton(
+                                tooltip: 'Earlier month',
+                                onPressed: _monthIndex < months.length - 1
+                                    ? () => setState(() => _monthIndex++)
+                                    : null,
+                                icon: const Icon(Icons.chevron_left),
+                              ),
+                              IconButton(
+                                tooltip: 'Later month',
+                                onPressed: _monthIndex > 0
+                                    ? () => setState(() => _monthIndex--)
+                                    : null,
+                                icon: const Icon(Icons.chevron_right),
+                              ),
+                            ]),
+                            Row(children: [
+                              Expanded(
+                                  child: _Stat(
+                                      label: 'Money out', kobo: s.spentKobo)),
+                              Expanded(
+                                  child: _Stat(
+                                      label: 'Money in',
+                                      kobo: s.receivedKobo,
+                                      credit: true)),
+                            ]),
+                            if (s.categories.isNotEmpty) ...[
+                              const SizedBox(height: 14),
+                              _Insight(summary: s),
+                              const SizedBox(height: 14),
+                              for (final e in s.categories.take(5))
+                                _CategoryBar(
+                                    category: e.key,
+                                    kobo: e.value,
+                                    total: s.spentKobo,
+                                    onTap: () => _openCategory(e.key)),
+                            ] else
+                              Padding(
+                                padding:
+                                    const EdgeInsets.only(top: 12, right: 10),
+                                child: Text(
+                                    'No spending recorded this month yet.',
+                                    style:
+                                        TextStyle(color: cs.onSurfaceVariant)),
+                              ),
+                          ]),
                     ),
                   ),
                 ),
@@ -183,15 +212,19 @@ class _HomeScreenState extends State<HomeScreen> {
                       child: Padding(
                         padding: const EdgeInsets.all(16),
                         child: Row(children: [
-                          Icon(Icons.chat_bubble_outline, color: cs.onPrimaryContainer),
+                          Icon(Icons.chat_bubble_outline,
+                              color: cs.onPrimaryContainer),
                           const SizedBox(width: 12),
                           Expanded(
                             child: Text(
                               'Ask anything, like "how much did I spend on food last week?"',
-                              style: TextStyle(color: cs.onPrimaryContainer, fontWeight: FontWeight.w600),
+                              style: TextStyle(
+                                  color: cs.onPrimaryContainer,
+                                  fontWeight: FontWeight.w600),
                             ),
                           ),
-                          Icon(Icons.chevron_right, color: cs.onPrimaryContainer),
+                          Icon(Icons.chevron_right,
+                              color: cs.onPrimaryContainer),
                         ]),
                       ),
                     ),
@@ -202,7 +235,10 @@ class _HomeScreenState extends State<HomeScreen> {
                 Padding(
                   padding: const EdgeInsets.fromLTRB(20, 20, 8, 4),
                   child: Row(children: [
-                    Expanded(child: Text('Recent', style: t.titleMedium?.copyWith(fontWeight: FontWeight.w700))),
+                    Expanded(
+                        child: Text('Recent',
+                            style: t.titleMedium
+                                ?.copyWith(fontWeight: FontWeight.w700))),
                     TextButton(
                       onPressed: () {
                         ActivityScreen.categoryFilter.value = null;
@@ -242,7 +278,9 @@ class _Stat extends StatelessWidget {
           formatNaira(kobo),
           style: display(Theme.of(context).textTheme.headlineSmall?.copyWith(
                 fontWeight: FontWeight.w700,
-                color: credit ? (dark ? Palette.darkGreen : Palette.credit) : cs.onSurface,
+                color: credit
+                    ? (dark ? Palette.darkGreen : Palette.credit)
+                    : cs.onSurface,
               )),
         ),
       ),
@@ -259,7 +297,9 @@ class _Insight extends StatelessWidget {
   Widget build(BuildContext context) {
     final cs = Theme.of(context).colorScheme;
     final top = summary.categories.first;
-    final share = summary.spentKobo == 0 ? 0 : (top.value * 100 / summary.spentKobo).round();
+    final share = summary.spentKobo == 0
+        ? 0
+        : (top.value * 100 / summary.spentKobo).round();
     return Container(
       margin: const EdgeInsets.only(right: 10),
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
@@ -282,7 +322,11 @@ class _Insight extends StatelessWidget {
 }
 
 class _CategoryBar extends StatelessWidget {
-  const _CategoryBar({required this.category, required this.kobo, required this.total, required this.onTap});
+  const _CategoryBar(
+      {required this.category,
+      required this.kobo,
+      required this.total,
+      required this.onTap});
   final String category;
   final int kobo;
   final int total;
@@ -301,17 +345,26 @@ class _CategoryBar extends StatelessWidget {
         child: Row(children: [
           Icon(c.icon, size: 18, color: cs.onSurfaceVariant),
           const SizedBox(width: 10),
-          SizedBox(width: 104, child: Text(c.label, overflow: TextOverflow.ellipsis)),
+          SizedBox(
+              width: 104,
+              child: Text(c.label, overflow: TextOverflow.ellipsis)),
           Expanded(
             child: ClipRRect(
               borderRadius: BorderRadius.circular(4),
-              child: LinearProgressIndicator(value: frac, minHeight: 8, color: cs.primary, backgroundColor: cs.surfaceContainerHigh),
+              child: LinearProgressIndicator(
+                  value: frac,
+                  minHeight: 8,
+                  color: cs.primary,
+                  backgroundColor: cs.surfaceContainerHigh),
             ),
           ),
           const SizedBox(width: 10),
           SizedBox(
             width: 92,
-            child: Text(formatNairaShort(kobo), textAlign: TextAlign.right, style: const TextStyle(fontFeatures: [FontFeature.tabularFigures()])),
+            child: Text(formatNairaShort(kobo),
+                textAlign: TextAlign.right,
+                style: const TextStyle(
+                    fontFeatures: [FontFeature.tabularFigures()])),
           ),
         ]),
       ),
@@ -331,7 +384,8 @@ class _EmptyHome extends StatelessWidget {
       child: Column(children: [
         const EmptyLedgerArt(),
         const SizedBox(height: 16),
-        Text('Your ledger is empty', style: Theme.of(context).textTheme.titleLarge),
+        Text('Your ledger is empty',
+            style: Theme.of(context).textTheme.titleLarge),
         const SizedBox(height: 8),
         Text(
           'Every debit and credit alert your bank sends is a line in your budget. Paste a few to begin.',
@@ -339,7 +393,10 @@ class _EmptyHome extends StatelessWidget {
           style: TextStyle(color: cs.onSurfaceVariant, height: 1.4),
         ),
         const SizedBox(height: 16),
-        FilledButton.icon(onPressed: onAdd, icon: const Icon(Icons.add), label: const Text('Add alerts')),
+        FilledButton.icon(
+            onPressed: onAdd,
+            icon: const Icon(Icons.add),
+            label: const Text('Add alerts')),
       ]),
     );
   }
