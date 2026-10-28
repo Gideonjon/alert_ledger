@@ -90,20 +90,40 @@ class LedgerApi {
 
   // ---- Function routes ----
 
-  Future<Map<String, dynamic>> _call(String path, Map<String, dynamic> body) async {
-    final exec = await functions.createExecution(
-      functionId: AppConfig.functionId,
-      path: path,
-      method: ExecutionMethod.pOST,
-      body: jsonEncode(body),
-      headers: {'content-type': 'application/json'},
+
+Future<Map<String, dynamic>> _call(
+  String path,
+  Map<String, dynamic> body,
+) async {
+  // Ensure an Appwrite session exists before invoking the function.
+  await ensureSession();
+
+  // Verify that the session is still available on this client.
+  final accountInfo = await account.get();
+  userId = accountInfo.$id;
+
+  final exec = await functions.createExecution(
+    functionId: AppConfig.functionId,
+    path: path,
+    method: ExecutionMethod.pOST,
+    body: jsonEncode(body),
+    headers: {'content-type': 'application/json'},
+  );
+
+  final data = exec.responseBody.isEmpty
+      ? <String, dynamic>{}
+      : jsonDecode(exec.responseBody) as Map<String, dynamic>;
+
+  if (exec.responseStatusCode >= 400) {
+    throw LedgerException(
+      data['error'] as String? ??
+          'Something went wrong (${exec.responseStatusCode}). Try again.',
     );
-    final data = exec.responseBody.isEmpty ? <String, dynamic>{} : jsonDecode(exec.responseBody) as Map<String, dynamic>;
-    if (exec.responseStatusCode >= 400) {
-      throw LedgerException(data['error'] as String? ?? 'Something went wrong (${exec.responseStatusCode}). Try again.');
-    }
-    return data;
   }
+
+  return data;
+}
+
 
   Future<IngestSummary> ingest(List<String> alerts) async {
     final now = DateTime.now().toUtc().toIso8601String();
