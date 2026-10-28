@@ -1,7 +1,9 @@
+
 name: Build
 
 # Proves the app compiles for every platform and the backend tests pass.
 # Android and web build on Linux; iOS builds unsigned on macOS.
+
 on:
   push:
   pull_request:
@@ -14,51 +16,55 @@ jobs:
         working-directory: functions/ledger
     steps:
       - uses: actions/checkout@v4
+
       - uses: actions/setup-node@v4
         with:
           node-version: 22
+
       - run: npm ci
       - run: npm test
 
   android-web:
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: app
     steps:
       - uses: actions/checkout@v4
+
       - uses: actions/setup-java@v4
         with:
           distribution: temurin
           java-version: 17
+
       - uses: subosito/flutter-action@v2
         with:
           channel: stable
-      # Platform folders are generated, not committed, so the repo stays small
+
+      # Generate platform folders at the repository root.
       - run: flutter create . --platforms=android,ios,web --project-name alert_ledger --org app.alertledger
+
       - run: flutter pub get
       - run: flutter analyze --no-fatal-infos
       - run: flutter build web --release
       - run: flutter build apk --release
+
       - uses: actions/upload-artifact@v4
         with:
           name: alert-ledger-android
-          path: app/build/app/outputs/flutter-apk/app-release.apk
+          path: build/app/outputs/flutter-apk/app-release.apk
+
       - uses: actions/upload-artifact@v4
         with:
           name: alert-ledger-web
-          path: app/build/web
+          path: build/web
 
   ios:
     runs-on: macos-latest
-    defaults:
-      run:
-        working-directory: app
     steps:
       - uses: actions/checkout@v4
+
       - uses: subosito/flutter-action@v2
         with:
           channel: stable
+
       - run: flutter create . --platforms=android,ios,web --project-name alert_ledger --org app.alertledger
       - run: flutter pub get
       - run: flutter build ios --release --no-codesign
