@@ -1,0 +1,14 @@
+{
+  "name": "alert-ledger-function",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "main": "src/main.js",
+  "scripts": {
+    "test": "node --test test/parser.test.js test/flow.test.js",
+    "setup": "node scripts/setup.mjs"
+  },
+  "dependencies": {
+    "node-appwrite": "^31.0.0"
+  }
+}
