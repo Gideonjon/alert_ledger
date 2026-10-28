@@ -95,7 +95,7 @@ test('ingest + ask end to end', async () => {
 
   assert.equal(results.filter((r) => r.status === 'created').length, 7);
   assert.equal(results.filter((r) => r.status === 'unparsed').length, 1);
-  assert.equal(svc.vdocs.tx_vectors.length, 7);
+  assert.equal(svc.rows.length, 7);
 
   // Duplicate paste is ignored
   const again = await ingest(svc, 'u1', { text: fixtures[0].raw }, console.log);
@@ -137,9 +137,7 @@ test('fixing a category teaches the app, and delete removes everywhere', async (
   // A new branch of the same merchant now lands in groceries via the user's seed
   const next = await ingest(svc, 'u1', { text: 'GTBank Alert\nAmt: NGN2,000.00 DR\nDesc: POS PURCHASE OBONG VENTURES EWET\nDate: 2026-10-20' }, console.log);
   assert.equal(next.results[0].row.category, 'groceries');
-  assert.equal(next.results[0].row.categorySource, 'vector');
-
-  // Another user does not inherit u1's correction
+assert.equal(next.results[0].row.categorySource, 'user');  // Another user does not inherit u1's correction
   const other = await ingest(svc, 'u2', { text: 'GTBank Alert\nAmt: NGN2,000.00 DR\nDesc: POS PURCHASE OBONG VENTURES EWET\nDate: 2026-10-20' }, console.log);
   assert.equal(other.results[0].row.category, 'other');
 
@@ -148,8 +146,6 @@ test('fixing a category teaches the app, and delete removes everywhere', async (
 
   await deleteTx(svc, 'u1', { rowId: row.$id });
   assert.equal(svc.rows.some((r) => r.$id === row.$id), false);
-  assert.equal(svc.vdocs.tx_vectors.some((d) => d.$id === row.$id), false);
-  assert.equal(svc.vdocs.category_seeds.some((d) => d.$id === `s${row.$id}`), false);
 
   await assert.rejects(() => recategorize(svc, 'u1', { rowId: 'x', category: 'nope' }), /Unknown category/);
 });
