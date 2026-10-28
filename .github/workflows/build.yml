@@ -65,6 +65,5 @@ jobs:
         with:
           channel: stable
 
-      - run: flutter create . --platforms=android,ios,web --project-name alert_ledger --org app.alertledger
       - run: flutter pub get
       - run: flutter build ios --release --no-codesign
